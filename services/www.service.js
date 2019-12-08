@@ -10,6 +10,13 @@ module.exports = {
 	name: "www",
 	hooks: {
 		before: {
+			'*': [function (ctx) {
+				if (ctx.action.auth && !ctx.meta.user) {
+					return Promise.reject(new MoleculerClientError("Please Login!", 422, "", [{ field: "user", message: "not found" }]));
+				} else {
+					return Promise.resolve(ctx)
+				}
+			}],
 			['me']: [
 				function (ctx) {
 					const { user } = ctx.meta
@@ -24,15 +31,12 @@ module.exports = {
 	/**
 	 * Service settings
 	 */
-	settings: {
-	},
+	settings: {},
 
 	/**
 	 * Service metadata
 	 */
-	metadata: {
-
-	},
+	metadata: {},
 
 	/**
 	 * Service dependencies
@@ -44,12 +48,13 @@ module.exports = {
 	 */
 	actions: {
 		'signin': {
+			auth: true,
 			handler(ctx) {
 				const { user } = ctx.params
 				return ctx.call('user.login', { user })
 			}
 		},
-		'signup' (ctx) {
+		'signup'(ctx) {
 			const { user } = ctx.params
 			return ctx.call('user.create', { user })
 		},
@@ -65,21 +70,21 @@ module.exports = {
 				return ctx.call('user.list')
 			}
 		},
-		'get-public-surveys' (ctx) {
-			return ctx.call('survey.find', {  query: { public: true } })
+		'get-public-surveys'(ctx) {
+			return ctx.call('survey.find', { query: { public: true } })
 		},
-		'get-private-surveys' (ctx) {
-			return ctx.call('survey.find', {  query: { public: false } })
+		'get-private-surveys'(ctx) {
+			return ctx.call('survey.find', { query: { public: false } })
 		},
-		'create-survey' (ctx) {
+		'create-survey'(ctx) {
 			const { survey } = ctx.params
 			return ctx.call('survey.insert', { survey })
 		},
-		'update-survey' (ctx) {
+		'update-survey'(ctx) {
 			const { survey } = ctx.params
 			return ctx.call('survey.insert', { survey })
 		},
-		'delete-survey' (ctx) {
+		'delete-survey'(ctx) {
 			const { id } = ctx.params
 			return ctx.call('survey.remove', { id })
 		},
