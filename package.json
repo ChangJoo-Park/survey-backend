@@ -28,6 +28,7 @@
     "ioredis": "^4.14.0",
     "jsonwebtoken": "^8.5.1",
     "moleculer": "^0.13.9",
+    "moleculer-console-tracer": "^0.2.2",
     "moleculer-db": "^0.8.4",
     "moleculer-db-adapter-mongo": "^0.4.6",
     "moleculer-jaeger": "^0.2.2",
