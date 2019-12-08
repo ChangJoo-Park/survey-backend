@@ -15,6 +15,14 @@ module.exports = {
 	 * Service hooks
 	 */
 	hooks: {
+		before: {
+			list: [
+				function (ctx) {
+					this.broker.emit('some.thing', {})
+					return Promise.resolve()
+				}
+			]
+		},
 		error: {}
 	},
 	/**
@@ -30,18 +38,19 @@ module.exports = {
 			}
 		},
 		idField: "_id",
-		fields: ["_id", "title", "description", "questions", "author"],
+		fields: ["_id", "title", "description", "questions", "author", "public"],
 		entityValidator: {
 			title: 'string',
+			public: { type: 'boolean', optional: true, default: false },
 			description: { type: 'string', optional: true },
 			questions: {
-				type: 'array', optional: true, props: {
+				type: 'array', optional: true,  default: [], props: {
 					block: {
 						type: 'object', props: {
-							type: 'string',
+							type: { type: 'string', contains: ['string', 'text', 'checkbox', 'date', 'time', 'datetime' ] },
 							title: 'string',
 							description: 'string',
-							options: { type: 'array' }
+							options: { type: 'array', default: [] }
 						}
 					}
 				}
