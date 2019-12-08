@@ -15,10 +15,25 @@ module.exports = {
 
 			authentication: true,
 
-			whitelist: [
-				// Access to any actions in all services under "/api" URL
-				"**"
-			],
+			aliases: {
+				// Login
+				"POST /users/signin": "www.signin",
+				"POST /users/signup": "www.signup",
+
+				// Users
+				// "REST /users": "users",
+
+				// Current user
+				"GET /me": "www.me",
+				"PUT /me": "update-me",
+
+				// Surveys
+				"GET /surveys/public": "www.get-public-surveys",
+				"GET /surveys/private": "www.get-private-surveys",
+				"POST /surveys": "www.create-survey",
+				"PUT /surveys/:surveyId": "www.update-survey",
+				"DELETE /surveys/:surveyId": "www.update-survey",
+			},
 
 			cors: true,
 
