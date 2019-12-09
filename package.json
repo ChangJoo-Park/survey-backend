@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "My Moleculer microservices project",
   "scripts": {
-    "dev": "NODE_ENV=development moleculer-runner --repl --hot services",
-    "start": "moleculer-runner",
+    "dev": "NODE_ENV=development moleculer-runner --repl --hot services --instances=4",
+    "start": "moleculer-runner --instances=4 services",
     "cli": "moleculer connect NATS",
     "ci": "jest --watch",
     "test": "jest --coverage",
@@ -27,6 +27,7 @@
     "bcrypt": "^3.0.7",
     "ioredis": "^4.14.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
     "moleculer": "^0.13.9",
     "moleculer-console-tracer": "^0.2.2",
     "moleculer-db": "^0.8.4",
