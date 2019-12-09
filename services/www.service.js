@@ -48,7 +48,6 @@ module.exports = {
 	 */
 	actions: {
 		'signin': {
-			auth: true,
 			handler(ctx) {
 				const { user } = ctx.params
 				return ctx.call('user.login', { user })
