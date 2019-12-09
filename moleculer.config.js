@@ -56,7 +56,7 @@ module.exports = {
 		// Enable feature
 		enabled: true,
 		// Count of retries
-		retries: 5,
+		retries: 0,
 		// First delay in milliseconds.
 		delay: 100,
 		// Maximum delay in milliseconds.
