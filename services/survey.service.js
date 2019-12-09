@@ -42,10 +42,16 @@ module.exports = {
 				params: {
 					fields: ["username", "image"]
 				}
+			},
+			participantsCount(ids, surveys, rule, ctx) {
+				return this.Promise.all(surveys.map(survey => ctx.call("participation.count", { survey: survey._id.toString() }).then(count => survey.participantsCount = count)))
+			},
+			participations(ids, surveys, rule, ctx) {
+				return this.Promise.all(surveys.map(survey => ctx.call("participation.find", { survey: survey._id.toString() }).then(participations => survey.participations = participations)))
 			}
 		},
 		idField: "_id",
-		fields: ["_id", "title", "description", "questions", "public", 'author', 'questions'],
+		fields: ["_id", "title", "description", "questions", "public", 'author', 'questions', 'participantsCount', 'participations'],
 		entityValidator: {
 			title: 'string',
 			description: { type: 'string', optional: true },

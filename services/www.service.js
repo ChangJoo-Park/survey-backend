@@ -75,16 +75,13 @@ module.exports = {
 		},
 		'participate-survey'(ctx) {
 			const { participant } = ctx.params
-			this.logger.info('==========')
-			this.logger.info(participant)
-			this.logger.info('==========')
 			return ctx.call('participation.insert', { entity: participant })
 		},
 		'get-public-surveys'(ctx) {
-			return ctx.call('survey.find', { query: { public: true }, populate: ['author'] })
+			return ctx.call('survey.find', { query: { public: true }, populate: ['author', 'participantsCount'] })
 		},
 		'get-private-surveys'(ctx) {
-			return ctx.call('survey.find', { query: { public: false }, populate: ['author'] })
+			return ctx.call('survey.find', { query: { public: false }, populate: ['author', 'participantsCount'] })
 		},
 		'get-survey'(ctx) {
 			const { surveyId: id } = ctx.params
