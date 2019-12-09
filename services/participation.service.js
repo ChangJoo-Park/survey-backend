@@ -25,7 +25,10 @@ module.exports = {
 		idField: "_id",
 		entityValidator: {
 			survey: 'string',
-			answers: { type: 'array' },
+			answers: { type: 'array', default: [], props: {
+				_id: 'string',
+				value: 'any'
+			} },
 			ua: { type: 'string', optional: true }
 		}
 	},
@@ -74,7 +77,7 @@ module.exports = {
 	 * Service created lifecycle event handler
 	 */
 	created() {
-
+		this.logger.info("Participation Service created!");
 	},
 
 	/**
@@ -89,5 +92,9 @@ module.exports = {
 	 */
 	stopped() {
 
-	}
+	},
+
+	entityCreated () {
+		this.logger.info('entityCreated')
+	},
 };

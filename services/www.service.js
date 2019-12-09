@@ -14,9 +14,8 @@ module.exports = {
 			'*': [function (ctx) {
 				if (ctx.action.auth && !ctx.meta.user) {
 					return Promise.reject(new MoleculerClientError("Please Login!", 422, "", [{ field: "user", message: "not found" }]));
-				} else {
-					return Promise.resolve(ctx)
 				}
+				return true
 			}],
 			['me']: [
 				function (ctx) {
@@ -79,7 +78,7 @@ module.exports = {
 			this.logger.info('==========')
 			this.logger.info(participant)
 			this.logger.info('==========')
-			return ctx.call('participation.create', participant)
+			return ctx.call('participation.insert', { entity: participant })
 		},
 		'get-public-surveys'(ctx) {
 			return ctx.call('survey.find', { query: { public: true }, populate: ['author'] })

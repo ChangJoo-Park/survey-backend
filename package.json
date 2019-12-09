@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "My Moleculer microservices project",
   "scripts": {
-    "dev": "NODE_ENV=development moleculer-runner --repl --hot services --instances=4",
+    "dev": "NODE_ENV=development moleculer-runner --repl --hot services",
     "start": "moleculer-runner --instances=4 services",
     "cli": "moleculer connect NATS",
     "ci": "jest --watch",
@@ -32,6 +32,7 @@
     "moleculer-console-tracer": "^0.2.2",
     "moleculer-db": "^0.8.4",
     "moleculer-db-adapter-mongo": "^0.4.6",
+    "moleculer-io": "^1.1.2",
     "moleculer-jaeger": "^0.2.2",
     "moleculer-web": "^0.8.5",
     "nats": "^1.3.0",
