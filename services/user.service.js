@@ -95,17 +95,17 @@ module.exports = {
 		 * @param {String} id - id from user
 		 * @returns {}
 		 */
-    get: {
-      auth: 'required',
-      cache: {},
-      params: {
-        id: { type: 'string' }
-      },
-      handler(ctx) {
-        const { id: _id } = ctx.params
-        return this.getById(_id)
-      }
-    },
+    // get: {
+    //   auth: 'required',
+    //   cache: {},
+    //   params: {
+    //     id: { type: 'string' }
+    //   },
+    //   handler(ctx) {
+    //     const { id: _id } = ctx.params
+    //     return this.getById(_id)
+    //   }
+    // },
 		/**
 		 * Update user
 		 *

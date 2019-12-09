@@ -16,14 +16,21 @@ module.exports = {
 	 */
 	hooks: {
 		before: {
-			list: [
-				function (ctx) {
-					this.broker.emit('some.thing', {})
-					return Promise.resolve()
+			list: []
+		},
+		after: {
+			create: [
+				function (ctx, survey) {
+					const { user } = ctx.meta
+					if (user) {
+						return ctx.call('survey.update', { _id: survey._id, author: user._id })
+					} else {
+						return ctx
+					}
 				}
 			]
 		},
-		error: {}
+		error: {},
 	},
 	/**
 	 * Service settings
@@ -31,25 +38,27 @@ module.exports = {
 	settings: {
 		populates: {
 			author: {
-				action: "users.get",
+				action: "user.get",
 				params: {
 					fields: ["username", "image"]
 				}
 			}
 		},
 		idField: "_id",
-		fields: ["_id", "title", "description", "questions", "author", "public"],
+		fields: ["_id", "title", "description", "questions", "public", 'author', 'questions'],
 		entityValidator: {
 			title: 'string',
-			public: { type: 'boolean', optional: true, default: false },
 			description: { type: 'string', optional: true },
+			public: { type: 'boolean', default: false },
+			author: { type: 'string', optional: true },
 			questions: {
-				type: 'array', optional: true,  default: [], props: {
-					block: {
+				type: 'array', optional: true, props: {
+					question: {
 						type: 'object', props: {
-							type: { type: 'string', contains: ['string', 'text', 'checkbox', 'date', 'time', 'datetime' ] },
+							_id: { type: 'string' },
+							type: { type: 'string', contains: ['string', 'text', 'checkbox', 'radio', 'date', 'time', 'datetime' ] },
 							title: 'string',
-							description: 'string',
+							description: { type: 'string', optional: true },
 							options: { type: 'array', default: [] }
 						}
 					}
@@ -120,7 +129,6 @@ module.exports = {
 	},
 
 	entityUpdated(json, ctx) {
-		// You can also access to Context
 		this.logger.info(`Entity updated by '${ctx.meta.user.name}' user!`);
 	},
 
