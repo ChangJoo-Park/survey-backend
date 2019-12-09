@@ -8,6 +8,7 @@ const { MoleculerClientError } = require("moleculer").Errors;
 module.exports = {
 
 	name: "www",
+	version: 1,
 	hooks: {
 		before: {
 			'*': [function (ctx) {
@@ -69,22 +70,37 @@ module.exports = {
 				return ctx.call('user.list')
 			}
 		},
+		'participants-survey'(ctx) {
+			const { surveyId } = ctx.params
+			return ctx.call('participation.list', { "search": surveyId, "serachFields": "survey" })
+		},
+		'participate-survey'(ctx) {
+			const { participant } = ctx.params
+			this.logger.info('==========')
+			this.logger.info(participant)
+			this.logger.info('==========')
+			return ctx.call('participation.create', participant)
+		},
 		'get-public-surveys'(ctx) {
-			return ctx.call('survey.find', { query: { public: true } })
+			return ctx.call('survey.find', { query: { public: true }, populate: ['author'] })
 		},
 		'get-private-surveys'(ctx) {
-			return ctx.call('survey.find', { query: { public: false } })
+			return ctx.call('survey.find', { query: { public: false }, populate: ['author'] })
+		},
+		'get-survey'(ctx) {
+			const { surveyId: id } = ctx.params
+			return ctx.call('survey.get', { id, populate: ['author'] })
 		},
 		'create-survey'(ctx) {
 			const { survey } = ctx.params
-			return ctx.call('survey.insert', { survey })
+			return ctx.call('survey.create', survey)
 		},
 		'update-survey'(ctx) {
 			const { survey } = ctx.params
-			return ctx.call('survey.insert', { survey })
+			return ctx.call('survey.update', { _id: survey._id, ...survey })
 		},
-		'delete-survey'(ctx) {
-			const { id } = ctx.params
+		'remove-survey'(ctx) {
+			const { surveyId: id } = ctx.params
 			return ctx.call('survey.remove', { id })
 		},
 	},

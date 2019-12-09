@@ -1,4 +1,5 @@
 "use strict";
+const _ = require('lodash')
 
 const ApiGateway = require("moleculer-web");
 
@@ -17,22 +18,27 @@ module.exports = {
 
 			aliases: {
 				// Login
-				"POST /users/signin": "www.signin",
-				"POST /users/signup": "www.signup",
+				"POST /users/signin": "v1.www.signin",
+				"POST /users/signup": "v1.www.signup",
 
 				// Users
 				// "REST /users": "users",
 
 				// Current user
-				"GET /me": "www.me",
+				"GET /me": "v1.www.me",
 				"PUT /me": "update-me",
 
+				// Participate a survey
+				"GET /surveys/:surveyId/participate": "v1.www.participants-survey",
+				"POST /surveys/:surveyId/participate": "v1.www.participate-survey",
+
 				// Surveys
-				"GET /surveys/public": "www.get-public-surveys",
-				"GET /surveys/private": "www.get-private-surveys",
-				"POST /surveys": "www.create-survey",
-				"PUT /surveys/:surveyId": "www.update-survey",
-				"DELETE /surveys/:surveyId": "www.update-survey",
+				"GET /surveys/public": "v1.www.get-public-surveys",
+				"GET /surveys/private": "v1.www.get-private-surveys",
+				"POST /surveys": "v1.www.create-survey",
+				"GET /surveys/:surveyId": "v1.www.get-survey",
+				"PUT /surveys/:surveyId": "v1.www.update-survey",
+				"DELETE /surveys/:surveyId": "v1.www.remove-survey",
 			},
 
 			cors: true,
@@ -60,9 +66,8 @@ module.exports = {
 
 					res.end(JSON.stringify({ errors: o }, null, 2));
 				} else {
-					// const errObj = _.pick(err, ["name", "message", "code", "type", "data"]);
-					// res.end(JSON.stringify(errObj, null, 2));
-					res.end('NOT FOUND');
+					const errObj = _.pick(err, ["name", "message", "code", "type", "data"]);
+					res.end(JSON.stringify(errObj, null, 2));
 				}
 				this.logResponse(req, res, err ? err.ctx : null);
 			}
