@@ -11,12 +11,6 @@ module.exports = {
 		DbService("participation"),
 	],
 	hooks: {
-		after: {
-			create(ctx) {
-				// TODO: call EVENT
-				return ctx
-			}
-		}
 	},
 	/**
 	 * Service settings
@@ -84,7 +78,6 @@ module.exports = {
 	 * Service started lifecycle event handler
 	 */
 	started() {
-
 	},
 
 	/**
@@ -94,7 +87,9 @@ module.exports = {
 
 	},
 
-	entityCreated () {
-		this.logger.info('entityCreated')
+	async entityCreated (participant, ctx) {
+		const total = await this.broker.call('participation.count', { "search": participant.survey, "serachFields": "survey" })
+		this.broker.emit(`someone-take-a-survey/${participant.survey}`, { participant, total })
+		return Promise.resolve(participant)
 	},
 };

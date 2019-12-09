@@ -1,7 +1,8 @@
 "use strict";
 const _ = require('lodash')
 
-const ApiGateway = require("moleculer-web");
+const ApiGateway = require("moleculer-web")
+const IO = require('socket.io')
 
 module.exports = {
 	name: "api",
@@ -78,6 +79,14 @@ module.exports = {
 			folder: "public"
 		}
 	},
+	events: {
+		"someone-take-a-survey/*"(payload, sender, event) {
+			if (!this.io) {
+				return
+			}
+			this.io.emit(event, { sender, event, payload });
+		}
+	},
 	methods: {
 		/**
 		 * Authorize the request
@@ -102,5 +111,17 @@ module.exports = {
 				return Promise.resolve(null);
 			}
 		}
+	},
+	started () {
+		// Create a Socket.IO instance, passing it our server
+		this.io = IO.listen(this.server);
+
+		// Add a connect listener
+		this.io.on("connection", client => {
+			this.logger.info("Client connected via websocket!");
+			client.on("disconnect", () => {
+				this.logger.info("Client disconnected");
+			});
+		});
 	}
 };

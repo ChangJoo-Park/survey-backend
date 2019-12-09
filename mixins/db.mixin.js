@@ -30,15 +30,8 @@ module.exports = function(collection) {
 		},
 
 		afterConnected() {
-			console.log('after connected')
 		},
 		entityCreated(type, json, ctx) {
-			console.log('entity Created')
-
-			return this.clearCache().then(() => {
-				const eventName = `${this.name}.entity.${type}`;
-				this.broker.emit(eventName, { meta: ctx.meta, entity: json });
-			});
 		},
 	};
 };
