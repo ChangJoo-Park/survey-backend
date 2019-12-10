@@ -44,10 +44,12 @@ module.exports = {
 				}
 			},
 			participantsCount(ids, surveys, rule, ctx) {
-				return this.Promise.all(surveys.map(survey => ctx.call("participation.count", { survey: survey._id.toString() }).then(count => survey.participantsCount = count)))
+				return this.Promise.all(surveys.map(survey => ctx.call("participation.count", { query: { survey: survey._id } })
+					.then(count => survey.participantsCount = count)))
 			},
 			participations(ids, surveys, rule, ctx) {
-				return this.Promise.all(surveys.map(survey => ctx.call("participation.find", { survey: survey._id.toString() }).then(participations => survey.participations = participations)))
+				return this.Promise.all(surveys.map(survey => ctx.call("participation.find", { query: { survey: survey._id } })
+					.then(participations => survey.participations = participations)))
 			}
 		},
 		idField: "_id",
