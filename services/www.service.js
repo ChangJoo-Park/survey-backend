@@ -86,14 +86,14 @@ module.exports = {
 			auth: true,
 			handler(ctx) {
 				const { user }  = ctx.meta
-				return ctx.call('survey.find', { query: { published: true, author: user._id }, populate: ['author', 'participantsCount'] })
+				return ctx.call('survey.find', { query: { published: true, author: user._id }, sort: "-createdAt", populate: ['author', 'participantsCount'] })
 			}
 		},
 		'get-draft-surveys-by-author': {
 			auth: true,
 			handler(ctx) {
 				const { user }  = ctx.meta
-				return ctx.call('survey.find', { query: { published: false, author: user._id }, populate: ['author', 'participantsCount'] })
+				return ctx.call('survey.find', { query: { published: false, author: user._id }, sort: "-createdAt", populate: ['author', 'participantsCount'] })
 			}
 		},
 		'get-survey'(ctx) {
