@@ -34,8 +34,8 @@ module.exports = {
 				"POST /surveys/:surveyId/participate": "v1.www.participate-survey",
 
 				// Surveys
-				"GET /surveys/public": "v1.www.get-public-surveys",
-				"GET /surveys/private": "v1.www.get-private-surveys",
+				"GET /surveys/public": "v1.www.get-public-surveys-by-author",
+				"GET /surveys/private": "v1.www.get-private-surveys-by-author",
 				"POST /surveys": "v1.www.create-survey",
 				"GET /surveys/:surveyId": "v1.www.get-survey",
 				"PUT /surveys/:surveyId": "v1.www.update-survey",

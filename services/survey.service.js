@@ -37,12 +37,12 @@ module.exports = {
 	 */
 	settings: {
 		populates: {
-			author: {
-				action: "user.get",
-				params: {
-					fields: ["username", "image"]
-				}
-			},
+			// author: {
+			// 	action: "user.get",
+			// 	params: {
+			// 		fields: ["id", "username", "image"]
+			// 	}
+			// },
 			participantsCount(ids, surveys, rule, ctx) {
 				return this.Promise.all(surveys.map(survey => ctx.call("participation.count", { query: { survey: survey._id } })
 					.then(count => survey.participantsCount = count)))
@@ -58,7 +58,7 @@ module.exports = {
 			title: 'string',
 			description: { type: 'string', optional: true },
 			public: { type: 'boolean', default: false },
-			author: { type: 'string', optional: true },
+			author: { type: 'string', optional: false },
 			questions: {
 				type: 'array', optional: true, props: {
 					question: {

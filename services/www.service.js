@@ -58,6 +58,7 @@ module.exports = {
 			return ctx.call('user.create', { user })
 		},
 		'me': {
+			auth: true,
 			handler(ctx) {
 				const { user } = ctx.meta
 				return Promise.resolve(user)
@@ -65,39 +66,62 @@ module.exports = {
 		},
 		// TODO
 		'update-me': {
+			auth: true,
 			handler(ctx) {
 				return ctx.call('user.list')
 			}
 		},
-		'participants-survey'(ctx) {
-			const { surveyId } = ctx.params
-			return ctx.call('participation.list', { "search": surveyId, "serachFields": "survey" })
+		'participants-survey': {
+			auth: true,
+			handler(ctx) {
+				const { surveyId } = ctx.params
+				return ctx.call('participation.list', { "search": surveyId, "serachFields": "survey" })
+			},
 		},
 		'participate-survey'(ctx) {
 			const { participant } = ctx.params
 			return ctx.call('participation.insert', { entity: participant })
 		},
-		'get-public-surveys'(ctx) {
-			return ctx.call('survey.find', { query: { public: true }, populate: ['author', 'participantsCount'] })
+		'get-public-surveys-by-author': {
+			auth: true,
+			handler(ctx) {
+				const { user }  = ctx.meta
+				return ctx.call('survey.find', { query: { public: true, author: user._id }, populate: ['author', 'participantsCount'] })
+			}
 		},
-		'get-private-surveys'(ctx) {
-			return ctx.call('survey.find', { query: { public: false }, populate: ['author', 'participantsCount'] })
+		'get-private-surveys-by-author': {
+			auth: true,
+			handler(ctx) {
+				const { user }  = ctx.meta
+				return ctx.call('survey.find', { query: { public: false, author: user._id }, populate: ['author', 'participantsCount'] })
+			}
 		},
 		'get-survey'(ctx) {
 			const { surveyId: id } = ctx.params
 			return ctx.call('survey.get', { id, populate: ['author'] })
 		},
-		'create-survey'(ctx) {
-			const { survey } = ctx.params
-			return ctx.call('survey.create', survey)
+		'create-survey': {
+			auth: true,
+			handler(ctx) {
+				const { survey } = ctx.params
+				const { user }  = ctx.meta
+				survey.author = user._id
+				return ctx.call('survey.create', survey)
+			}
 		},
-		'update-survey'(ctx) {
-			const { survey } = ctx.params
-			return ctx.call('survey.update', { _id: survey._id, ...survey })
+		'update-survey': {
+			auth: true,
+			handler(ctx) {
+				const { survey } = ctx.params
+				return ctx.call('survey.update', { _id: survey._id, ...survey })
+			}
 		},
-		'remove-survey'(ctx) {
-			const { surveyId: id } = ctx.params
-			return ctx.call('survey.remove', { id })
+		'remove-survey': {
+			auth: true,
+			handler(ctx) {
+				const { surveyId: id } = ctx.params
+				return ctx.call('survey.remove', { id })
+			}
 		},
 	},
 
