@@ -59,7 +59,7 @@ module.exports = {
         user: {
           type: 'object', props: {
             username: { type: 'string', min: 3 },
-            email: { type: 'string' },
+            email: { type: 'email' },
             password: { type: 'string', min: 3 },
           }
         }

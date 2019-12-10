@@ -82,18 +82,18 @@ module.exports = {
 			const { participant } = ctx.params
 			return ctx.call('participation.insert', { entity: participant })
 		},
-		'get-public-surveys-by-author': {
+		'get-published-surveys-by-author': {
 			auth: true,
 			handler(ctx) {
 				const { user }  = ctx.meta
-				return ctx.call('survey.find', { query: { public: true, author: user._id }, populate: ['author', 'participantsCount'] })
+				return ctx.call('survey.find', { query: { published: true, author: user._id }, populate: ['author', 'participantsCount'] })
 			}
 		},
-		'get-private-surveys-by-author': {
+		'get-draft-surveys-by-author': {
 			auth: true,
 			handler(ctx) {
 				const { user }  = ctx.meta
-				return ctx.call('survey.find', { query: { public: false, author: user._id }, populate: ['author', 'participantsCount'] })
+				return ctx.call('survey.find', { query: { published: false, author: user._id }, populate: ['author', 'participantsCount'] })
 			}
 		},
 		'get-survey'(ctx) {

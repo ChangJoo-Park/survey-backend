@@ -16,20 +16,27 @@ module.exports = {
 	 */
 	hooks: {
 		before: {
-			list: []
-		},
-		after: {
+			list: [],
 			create: [
-				function (ctx, survey) {
+				function addTimestamp(ctx) {
+					ctx.params.createdAt = new Date();
+					ctx.params.updatedAt = new Date();
 					const { user } = ctx.meta
-					if (user) {
-						return ctx.call('survey.update', { _id: survey._id, author: user._id })
-					} else {
-						return ctx
-					}
+					ctx.params.author = user._id
+					return ctx;
+				}
+			],
+			update: [
+				function addTimestamp(ctx) {
+					// FIXME
+					const { user } = ctx.meta
+					ctx.params.author = user._id
+					ctx.params.updatedAt = new Date();
+					return ctx;
 				}
 			]
 		},
+		after: {},
 		error: {},
 	},
 	/**
@@ -37,12 +44,12 @@ module.exports = {
 	 */
 	settings: {
 		populates: {
-			// author: {
-			// 	action: "user.get",
-			// 	params: {
-			// 		fields: ["id", "username", "image"]
-			// 	}
-			// },
+			author: {
+				action: "user.get",
+				params: {
+					fields: ["id", "_id", "username", "image"]
+				}
+			},
 			participantsCount(ids, surveys, rule, ctx) {
 				return this.Promise.all(surveys.map(survey => ctx.call("participation.count", { query: { survey: survey._id } })
 					.then(count => survey.participantsCount = count)))
@@ -53,18 +60,21 @@ module.exports = {
 			}
 		},
 		idField: "_id",
-		fields: ["_id", "title", "description", "questions", "public", 'author', 'questions', 'participantsCount', 'participations'],
+		fields: [
+			"_id", "title", "description", "questions", "createdAt", "updatedAt", "published", 'author', 'questions', 'participantsCount', 'participations',
+			"startAt", "endAt"
+		],
 		entityValidator: {
 			title: 'string',
 			description: { type: 'string', optional: true },
-			public: { type: 'boolean', default: false },
+			published: { type: 'boolean', default: false },
 			author: { type: 'string', optional: false },
 			questions: {
 				type: 'array', optional: true, props: {
 					question: {
 						type: 'object', props: {
 							_id: { type: 'string' },
-							type: { type: 'string', contains: ['string', 'text', 'checkbox', 'radio', 'date', 'time', 'datetime' ] },
+							type: { type: 'enum', values: ['string', 'text', 'checkbox', 'radio', 'date', 'time', 'datetime'] },
 							title: 'string',
 							description: { type: 'string', optional: true },
 							options: { type: 'array', default: [] }
@@ -72,6 +82,10 @@ module.exports = {
 					}
 				}
 			},
+			startAt: { type: 'date', optional: true },
+			endAt: { type: 'date', optional: true },
+			createdAt: { type: 'date' },
+			updatedAt: { type: 'date' }
 		}
 	},
 
