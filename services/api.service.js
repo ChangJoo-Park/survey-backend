@@ -24,7 +24,8 @@ module.exports = {
 
 				// Users
 				// "REST /users": "users",
-
+				// App Level Statistics
+				'GET /app-stats': 'v1.www.app-stats',
 				// Current user
 				"GET /me": "v1.www.me",
 				"PUT /me": "update-me",

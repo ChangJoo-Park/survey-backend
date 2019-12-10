@@ -123,6 +123,13 @@ module.exports = {
 				return ctx.call('survey.remove', { id })
 			}
 		},
+		'app-stats': {
+			async handler(ctx) {
+				const requests = [ctx.call('survey.count'), ctx.call('participation.count'), ctx.call('user.count')]
+				const [surveys, participations, users] = await Promise.all(requests)
+				return Promise.resolve({surveys, participations, users})
+			}
+		}
 	},
 
 	/**
