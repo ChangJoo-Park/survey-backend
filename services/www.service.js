@@ -78,22 +78,17 @@ module.exports = {
 				return ctx.call('participation.list', { "search": surveyId, "serachFields": "survey" })
 			},
 		},
-		'participate-survey'(ctx) {
-			const { participant } = ctx.params
-			return ctx.call('participation.insert', { entity: participant })
-		},
-		'get-published-surveys-by-author': {
-			auth: true,
+		'participate-survey': {
 			handler(ctx) {
-				const { user }  = ctx.meta
-				return this.getSurveysById(user._id, true)
+				const { participant } = ctx.params
+				return ctx.call('participation.insert', { entity: participant })
 			}
 		},
-		'get-draft-surveys-by-author': {
+		'get-surveys-by-author': {
 			auth: true,
 			handler(ctx) {
 				const { user }  = ctx.meta
-				return this.getSurveysById(user._id, false)
+				return this.getSurveysById(user._id)
 			}
 		},
 		'get-survey'(ctx) {
@@ -145,9 +140,9 @@ module.exports = {
 	 * Methods
 	 */
 	methods: {
-		getSurveysById(author, published = false) {
+		getSurveysById(author) {
 			return this.broker.call('survey.find', {
-				query: { published: published, author },
+				query: { author },
 				sort: "-createdAt",
 				populate: ['author', 'participantsCount']
 			})
