@@ -35,13 +35,14 @@ module.exports = {
 	transporter: "NATS",
 
 	// Define a cacher. More info: https://moleculer.services/docs/0.13/caching.html
-	// cacher: {
-	// 	type: process.env.NODE_ENV === 'development' ? false : "Redis",
-	// 	options: {
-	// 		ttl: 60
-	// 	}
-	// },
-	cacher: false,
+	cacher: {
+		// type: process.env.NODE_ENV === 'development' ? false : "Redis",
+		type: "Redis",
+		options: {
+			ttl: 60
+		}
+	},
+	// cacher: false,
 
 	// Define a serializer.
 	// Available values: "JSON", "Avro", "ProtoBuf", "MsgPack", "Notepack", "Thrift".
