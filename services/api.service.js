@@ -81,10 +81,12 @@ module.exports = {
 		}
 	},
 	events: {
+		"author/*"(payload, sender, event) {
+			if (!this.io) { return }
+			this.io.emit(event, { payload, sender, event });
+		},
 		"someone-take-a-survey/*"(payload, sender, event) {
-			if (!this.io) {
-				return
-			}
+			if (!this.io) { return }
 			this.io.emit(event, { sender, event, payload });
 		}
 	},

@@ -88,8 +88,11 @@ module.exports = {
 	},
 
 	async entityCreated (participant, ctx) {
+		// FIXME: NEED Optimize
+		const { author } = await this.broker.call('survey.get', { id: participant.survey, fields: 'author' })
 		const total = await this.broker.call('participation.count', { "search": participant.survey, "serachFields": "survey" })
 		this.broker.emit(`someone-take-a-survey/${participant.survey}`, { participant, total })
+		this.broker.emit(`author/${author}`, { event: 'PARTICIPATION_CREATED', survey: participant.survey, participantsCount: total })
 		return Promise.resolve(participant)
 	},
 };
