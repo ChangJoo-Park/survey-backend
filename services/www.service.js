@@ -88,7 +88,7 @@ module.exports = {
 			auth: true,
 			handler(ctx) {
 				const { user }  = ctx.meta
-				return this.getSurveysById(user._id)
+				return this.getSurveysByAuthor(user._id)
 			}
 		},
 		'get-survey'(ctx) {
@@ -140,7 +140,15 @@ module.exports = {
 	 * Methods
 	 */
 	methods: {
-		getSurveysById(author) {
+		getSurveysByAuthor(author) {
+			return this.broker.call('survey.find', {
+				query: { author },
+				sort: "-createdAt",
+				populate: ['author', 'participantsCount']
+			})
+		},
+		finishedSurveysById(author) {
+			// outside startAt and endAt. or finished
 			return this.broker.call('survey.find', {
 				query: { author },
 				sort: "-createdAt",
