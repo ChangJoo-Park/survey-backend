@@ -86,14 +86,14 @@ module.exports = {
 			auth: true,
 			handler(ctx) {
 				const { user }  = ctx.meta
-				return ctx.call('survey.find', { query: { published: true, author: user._id }, sort: "-createdAt", populate: ['author', 'participantsCount'] })
+				return this.getSurveysById(user._id, true)
 			}
 		},
 		'get-draft-surveys-by-author': {
 			auth: true,
 			handler(ctx) {
 				const { user }  = ctx.meta
-				return ctx.call('survey.find', { query: { published: false, author: user._id }, sort: "-createdAt", populate: ['author', 'participantsCount'] })
+				return this.getSurveysById(user._id, false)
 			}
 		},
 		'get-survey'(ctx) {
@@ -145,7 +145,13 @@ module.exports = {
 	 * Methods
 	 */
 	methods: {
-
+		getSurveysById(author, published = false) {
+			return this.broker.call('survey.find', {
+				query: { published: published, author },
+				sort: "-createdAt",
+				populate: ['author', 'participantsCount']
+			})
+		}
 	},
 
 	/**

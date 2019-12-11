@@ -55,7 +55,7 @@ module.exports = {
 					.then(count => survey.participantsCount = count)))
 			},
 			participations(ids, surveys, rule, ctx) {
-				return this.Promise.all(surveys.map(survey => ctx.call("participation.find", { query: { survey: survey._id } })
+				return this.broker.mcall(surveys.map(survey => ctx.call("participation.find", { query: { survey: survey._id } })
 					.then(participations => survey.participations = participations)))
 			}
 		},
