@@ -7,7 +7,12 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 
-RUN npm install --production
+RUN apk --no-cache --virtual build-dependencies add \
+    python \
+    make \
+    g++ \
+    && npm install --production \
+    && apk del build-dependencies
 
 COPY . .
 
