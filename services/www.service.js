@@ -71,11 +71,25 @@ module.exports = {
 				return ctx.call('user.list')
 			}
 		},
+		'search-survey': {
+			auth: true,
+			handler(ctx) {
+				const { user } = ctx.meta
+				const { term } = ctx.params
+				return ctx.call('survey.find', {
+					query: {
+						author: user._id
+					},
+					search: term,
+					populate: ['author', 'participantsCount'],
+				})
+			}
+		},
 		'participants-survey': {
 			auth: true,
 			handler(ctx) {
 				const { surveyId } = ctx.params
-				return ctx.call('participation.list', { "search": surveyId, "serachFields": "survey" })
+				return ctx.call('participation.list', { "search": surveyId, "searchFields": "survey" })
 			},
 		},
 		'participate-survey': {

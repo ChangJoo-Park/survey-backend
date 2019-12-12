@@ -40,6 +40,7 @@ module.exports = {
 				"POST /surveys/:surveyId/participate": "v1.www.participate-survey",
 
 				// Surveys
+				"GET /me/surveys/search": "v1.www.search-survey",
 				"GET /me/surveys": "v1.www.get-surveys-by-author",
 				"POST /surveys": "v1.www.create-survey",
 				"GET /surveys/:surveyId": "v1.www.get-survey",

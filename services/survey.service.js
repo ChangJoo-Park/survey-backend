@@ -57,18 +57,23 @@ module.exports = {
 			participations(ids, surveys, rule, ctx) {
 				return this.broker.mcall(surveys.map(survey => ctx.call("participation.find", { query: { survey: survey._id } })
 					.then(participations => survey.participations = participations)))
+			},
+			canParticipation(ids, surveys, rule, ctx) {
+				const now = new Date()
+				return Promise.resolve(false)
 			}
 		},
 		idField: "_id",
 		fields: [
 			"_id", "title", "description", "questions", "createdAt", "updatedAt", "published", 'author', 'questions', 'participantsCount', 'participations',
-			"startAt", "endAt"
+			"startAt", "endAt", "finished", "canParticipation"
 		],
 		entityValidator: {
 			title: 'string',
 			description: { type: 'string', optional: true },
 			published: { type: 'boolean', default: false },
 			author: { type: 'string', optional: false },
+			finished: { type: 'boolean', default: false, optional: true },
 			questions: {
 				type: 'array', optional: true, props: {
 					question: {
