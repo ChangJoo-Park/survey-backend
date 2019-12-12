@@ -19,11 +19,11 @@ module.exports = {
 			list: [],
 			create: [
 				function addTimestamp(ctx) {
-					ctx.params.createdAt = new Date();
-					ctx.params.updatedAt = new Date();
+					ctx.params.createdAt = new Date()
+					ctx.params.updatedAt = new Date()
 					const { user } = ctx.meta
 					ctx.params.author = user._id
-					return ctx;
+					return ctx
 				}
 			],
 			update: [
@@ -31,8 +31,9 @@ module.exports = {
 					// FIXME
 					const { user } = ctx.meta
 					ctx.params.author = user._id
-					ctx.params.updatedAt = new Date();
-					return ctx;
+					ctx.params.updatedAt = new Date()
+					ctx.params.publishedAt = ctx.params.published ? new Date() : null
+					return ctx
 				}
 			]
 		},
@@ -66,7 +67,7 @@ module.exports = {
 		idField: "_id",
 		fields: [
 			"_id", "title", "description", "questions", "createdAt", "updatedAt", "published", 'author', 'questions', 'participantsCount', 'participations',
-			"startAt", "endAt", "finished", "canParticipation"
+			"startAt", "endAt", "finished", "canParticipation", "publishedAt"
 		],
 		entityValidator: {
 			title: 'string',
@@ -90,7 +91,8 @@ module.exports = {
 			startAt: { type: 'date', optional: true },
 			endAt: { type: 'date', optional: true },
 			createdAt: { type: 'date' },
-			updatedAt: { type: 'date' }
+			updatedAt: { type: 'date' },
+			publishedAt: { type: 'date', optional: true }
 		}
 	},
 
