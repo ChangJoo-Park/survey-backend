@@ -107,7 +107,7 @@ module.exports = {
 		},
 		'get-survey'(ctx) {
 			const { surveyId: id } = ctx.params
-			return ctx.call('survey.get', { id, populate: ['author'] })
+			return ctx.call('survey.get', { id, populate: ['author', 'participantsCount'] })
 		},
 		'create-survey': {
 			auth: true,
