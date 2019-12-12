@@ -15,6 +15,9 @@
  * 	via environment variables, use the `MOL_` prefix and double underscore `__` for nested properties in .env file.
  * 	For example, to set the cacher prefix to `MYCACHE`, you should declare an env var as `MOL_CACHER__OPTIONS__PREFIX=MYCACHE`.
  */
+
+const DEVELOPMENT = process.env.NODE_ENV === 'development'
+
 module.exports = {
 	// Namespace of nodes to segment your nodes on the same network.
 	namespace: "",
@@ -36,11 +39,8 @@ module.exports = {
 
 	// Define a cacher. More info: https://moleculer.services/docs/0.13/caching.html
 	cacher: {
-		// type: process.env.NODE_ENV === 'development' ? false : "Redis",
-		type: "Redis",
-		options: {
-			ttl: 60
-		}
+		type: DEVELOPMENT ? false : "Redis",
+		options: DEVELOPMENT ? {} : { ttl: 60 }
 	},
 	// cacher: false,
 
